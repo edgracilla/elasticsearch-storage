@@ -1,7 +1,7 @@
 {
   "name": "elasticsearch-storage",
   "description": "Elasticsearch storage plugin for Reekoh IoT Platform",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Reekoh, Inc.",
   "main": "app.js",
   "scripts": {

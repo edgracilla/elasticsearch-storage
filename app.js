@@ -4,13 +4,11 @@ var async         = require('async'),
 	moment        = require('moment'),
 	platform      = require('./platform'),
 	isPlainObject = require('lodash.isplainobject'),
+	isArray = require('lodash.isarray'),
 	params        = {},
 	client;
 
-/*
- * Listen for the data event.
- */
-platform.on('data', function (data) {
+let sendData = (data) => {
 	var processedData = data;
 
 	var save = function () {
@@ -129,6 +127,19 @@ platform.on('data', function (data) {
 
 	} else
 		save();
+};
+
+platform.on('data', function (data) {
+	if(isPlainObject(data)){
+		sendData(data);
+	}
+	else if(isArray(data)){
+		async.each(data, function(datum){
+			sendData(datum);
+		});
+	}
+	else
+		platform.handleException(new Error(`Invalid data received. Data must be a valid Array/JSON Object or a collection of objects. Data: ${data}`));
 });
 
 /*

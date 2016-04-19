@@ -1,7 +1,7 @@
 {
   "name": "elasticsearch-storage",
   "description": "Elasticsearch storage plugin for Reekoh IoT Platform",
-  "version": "1.0.5",
+  "version": "1.0.0",
   "author": "Reekoh, Inc.",
   "main": "app.js",
   "scripts": {
@@ -19,14 +19,14 @@
     "lodash.isplainobject": "^4.0.4"
   },
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-cli": "^1.1.0",
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.1",
     "gulp-jshint": "^2.0.0",
     "gulp-json-lint": "^0.1.0",
     "gulp-mocha": "^2.2.0",
-    "gulp-plumber": "^1.0.1",
-    "mocha": "^2.3.4",
-    "should": "^7.1.1"
+    "gulp-plumber": "^1.1.0",
+    "mocha": "^2.4.5",
+    "should": "^8.3.1"
   },
   "license": "LGPL-3.0"
 }

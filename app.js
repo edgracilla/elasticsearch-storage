@@ -72,8 +72,16 @@ platform.once('ready', function (options) {
 
 	opt = options;
 
-	if (options.port) host = `${host}:${options.port}`;
-	if (options.user) auth = `${options.user}:${options.password}@`;
+	if (options.port)
+		host = `${host}:${options.port}`;
+
+	if (options.user)
+		auth = `${options.user}`;
+
+	if (options.password)
+		auth = `${auth}:${options.password}@`;
+	else
+		auth = `${auth}:@`;
 
 	apiVersion = options.apiVersion || config.apiVersion.default;
 	host = `${options.protocol}://${auth}${host}`;

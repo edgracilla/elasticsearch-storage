@@ -80,7 +80,7 @@ platform.once('ready', function (options) {
 
 	if (options.password)
 		auth = `${auth}:${options.password}@`;
-	else
+	else if (options.user)
 		auth = `${auth}:@`;
 
 	apiVersion = options.apiVersion || config.apiVersion.default;

@@ -65,13 +65,13 @@
 	"required": true,
 	"help": "Name of the ElasticSearch Type to be used to store the data."
   },
-  "id_field": {
+  "idField": {
 	"label": "Id Field/Key",
 	"type": "String",
 	"required": false,
 	"help": "(Optional) If blank, assumed that id is auto-incremented otherwise, the value of this field is grabbed from the data and set as ID for the document."
   },
-  "parent_field": {
+  "parentField": {
 	"label": "Parent Field/Key",
 	"type": "String",
 	"required": false,

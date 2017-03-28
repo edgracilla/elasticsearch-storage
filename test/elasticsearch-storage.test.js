@@ -4,7 +4,6 @@
 
 const amqp = require('amqplib')
 const should = require('should')
-const cp = require('child_process')
 
 const INPUT_PIPE = 'demo.pipe.storage'
 const BROKER = 'amqp://guest:guest@127.0.0.1/'
@@ -37,7 +36,6 @@ let record = {
 }
 
 describe('Storage', function () {
-  this.slow(5000)
 
   before('init', () => {
     process.env.BROKER = BROKER
@@ -54,28 +52,15 @@ describe('Storage', function () {
     })
   })
 
-  after('terminate child process', function () {
+  after('terminate', function () {
     _conn.close()
-    setTimeout(function () {
-      _app.kill('SIGKILL')
-    }, 3000)
   })
 
-  describe('#spawn', function () {
-    it('should spawn a child process', function () {
-      should.ok(_app = cp.fork(process.cwd()), 'Child process not spawned.')
-    })
-  })
-
-  describe('#handShake', function () {
-    it('should notify the parent process when ready within 5 seconds', function (done) {
-      this.timeout(5000)
-
-      _app.on('message', (message) => {
-        if (message.type === 'ready') {
-          done()
-        }
-      })
+  describe('#start', function () {
+    it('should start the app', function (done) {
+      this.timeout(10000)
+      _app = require('../app')
+      _app.once('init', done)
     })
   })
 
@@ -84,9 +69,7 @@ describe('Storage', function () {
       this.timeout(8000)
       _channel.sendToQueue(INPUT_PIPE, new Buffer(JSON.stringify(record)))
 
-      _app.on('message', (msg) => {
-        if (msg.type === 'processed') { done() }
-      })
+      _app.on('processed', done)
     })
   })
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const reekoh = require('reekoh')
-const _plugin = new reekoh.plugins.Storage()
+const plugin = new reekoh.plugins.Storage()
 
 const async = require('async')
 const elasticsearch = require('elasticsearch')
@@ -30,8 +30,8 @@ let sendData = (data, callback) => {
     body: data
   }), (error, result) => {
     if (!error) {
-      process.send({ type: 'processed' })
-      _plugin.log(JSON.stringify({
+      plugin.emit('processed')
+      plugin.log(JSON.stringify({
         title: 'Record Successfully inserted to ElasticSearch.',
         data: result
       }))
@@ -41,24 +41,24 @@ let sendData = (data, callback) => {
   })
 }
 
-_plugin.on('data', (data) => {
+plugin.on('data', (data) => {
   if (isPlainObject(data)) {
     sendData(data, (error) => {
-      if (error) _plugin.logException(error)
+      if (error) plugin.logException(error)
     })
   } else if (Array.isArray(data)) {
     async.each(data, (datum, done) => {
       sendData(datum, done)
     }, (error) => {
-      if (error) _plugin.logException(error)
+      if (error) plugin.logException(error)
     })
   } else {
-    _plugin.logException(new Error(`Invalid data received. Data must be a valid Array/JSON Object or a collection of objects. Data: ${data}`))
+    plugin.logException(new Error(`Invalid data received. Data must be a valid Array/JSON Object or a collection of objects. Data: ${data}`))
   }
 })
 
-_plugin.once('ready', () => {
-  options = _plugin.config
+plugin.once('ready', () => {
+  options = plugin.config
 
   let host = options.port
     ? `${options.host}:${options.port}`
@@ -79,6 +79,9 @@ _plugin.once('ready', () => {
     apiVersion: options.apiVersion
   })
 
-  _plugin.log('ElasticSearch Storage plugin initialized.')
-  process.send({ type: 'ready' })
+  plugin.log('ElasticSearch Storage plugin initialized.')
+  plugin.emit('init')
 })
+
+module.exports = plugin
+

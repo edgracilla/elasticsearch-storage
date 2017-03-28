@@ -1,18 +1,16 @@
-FROM node
+FROM node:boron
 
 MAINTAINER Reekoh
 
-WORKDIR /home
+RUN apt-get update && apt-get install -y build-essential
+
+RUN mkdir -p /home/node/elasticsearch-storage
+COPY . /home/node/elasticsearch-storage
+
+WORKDIR /home/node/elasticsearch-storage
 
 # Install dependencies
-ADD . /home
-RUN npm install
+RUN npm install pm2 yarn -g
+RUN yarn install
 
-# setting need environment variables
-ENV INPUT_PIPE="demo.storage" \
-	CONFIG="{}" \
-    LOGGERS="" \
-    EXCEPTION_LOGGERS="" \
-    BROKER="amqp://guest:guest@172.17.0.2/"
-
-CMD ["node", "app"]
+CMD ["pm2-docker", "--json", "app.yml"]

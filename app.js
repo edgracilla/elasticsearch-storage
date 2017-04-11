@@ -59,18 +59,26 @@ plugin.on('data', (data) => {
 
 plugin.once('ready', () => {
   options = plugin.config
+  let host
+  let auth
 
-  let host = options.port
-    ? `${options.host}:${options.port}`
-    : options.host
+  if (options.port) {
+    host = `${options.host}:${options.port}`
+  } else {
+    host = options.host
+  }
 
-  let auth = options.user
-    ? options.user
-    : ''
+  if (options.user) {
+    auth = options.user
+  } else {
+    auth = ''
+  }
 
-  auth = options.password
-    ? `${auth}:${options.password}@`
-    : `${auth}:@`
+  if (options.password) {
+    auth = `${auth}:${options.password}@`
+  } else {
+    auth = `${auth}:@`
+  }
 
   host = `${options.protocol}://${auth}${host}`
 
